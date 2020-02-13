@@ -15,7 +15,9 @@ int foo()
 
 	GET_RBP8(fini_ret_addr);
 	printf("fini_ret addr: %p\n", fini_ret_addr);
-
+	
+	if (ret_assert(init_ret_addr, fini_ret_addr))	printf("ok\n");
+	else return -1;
 	return 0;
 }
 
