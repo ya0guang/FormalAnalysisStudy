@@ -6,34 +6,43 @@ import sys
 def parse1file(filename):
 	file = open(filename, "r")
 	lines = file.readlines()
-	newfile = filename.split('.')[0] + "-stack.c"
-	writeFile = open(newfile,"a+")
+	newfile = filename.split('.')[0] + "-br-tb.txt"
+	writeFile = open(newfile,"w")
 
-	writeFile.write("#include \"stack-verif.h\"\n")
+	funcAddr = {}
 
+	funcName = ""
+	startAddr = ""
+	endAddr = ""
+	insList = ["call", "callq", "jmp", "jmpl", "jmpq", "jo", "jno", "js", "jns", "je", "jz", "jne", "jnz", "jb", "jnae", "jc", "jnb", "jae", "jnc", "jbe", "jna", "ja", "jnbe", "jl", "jnge", "jge", "jnl", "jle", "jng", "jg", "jnle", "jp", "jpe", "jnp", "jpo", "jcxz", "jecxz"]
+	jmps = []
 	for i in range(len(lines)):
-		if "{" in lines[i] and len(lines[i].split('{')[0]) == 0 and lines[i-1].strip().endswith(')'):
-			newlines = "\nvoid *init_ret_addr;\n" + "void *fini_ret_addr;\n" + "GET_RBP8(init_ret_addr);\n\n"
-			writeFile.write(lines[i])
-			writeFile.write(newlines)
-
-		elif lines[i].strip().endswith(') {') and not lines[i].strip().startswith('for') and not lines[i].strip().startswith('if') and not lines[i].strip().startswith('while') and "else if" not in lines[i]:
-			newlines = "\nvoid *init_ret_addr;\n" + "void *fini_ret_addr;\n" + "GET_RBP8(init_ret_addr);\n\n"
-			writeFile.write(lines[i])
-			writeFile.write(newlines)
+	#for line in lines:
+		inFlag = True
 		
-		elif lines[i].strip().startswith("return ") or lines[i].strip().startswith("return;"):
-			newlines = "\nGET_RBP8(fini_ret_addr);\n" + "assert(ret_assert(init_ret_addr, fini_ret_addr));\n"
-			writeFile.write(newlines)
-			writeFile.write(lines[i])
-		elif "}" in lines[i] and len(lines[i].split('}')[0]) == 0:
-			if ";" not in lines[i]:
-				newlines = "\nGET_RBP8(fini_ret_addr);\n" + "assert(ret_assert(init_ret_addr, fini_ret_addr));\n"
-				writeFile.write(newlines)
-			writeFile.write(lines[i])
-		else:
-			writeFile.write(lines[i])
+#if not inFlag:
+#			print(start)
+		
+		if " <" in lines[i] and ">:" in lines[i]:
+			startAddr = lines[i].split()[0]
+			funcName = lines[i].split()[1]
+			#print (funcName, startAddr, end="----")
+			#inFlag = True
 
+		if lines[i].startswith('\n'):
+			endAddr = lines[i-1].split(':')[0]
+#inFlang = False
+			addr =  startAddr + "->" + endAddr.strip()
+			print ("\t" + funcName + "\t", "\t", addr)
+			for jmp in jmps:
+				print("\t\t", jmp, "\t")
+			jmps = []
+		
+		for ins in insList:
+			if ("\t" + ins) in lines[i]:
+				jmps.append(lines[i])
+			
+	
 if __name__ == "__main__":
 	if sys.argv[1] != None:
 		parse1file(sys.argv[1])
