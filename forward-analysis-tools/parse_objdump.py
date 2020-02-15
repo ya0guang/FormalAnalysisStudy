@@ -21,7 +21,6 @@ def parse1file(filename):
 		inFlag = True
 		
 #if not inFlag:
-#			print(start)
 		
 		if " <" in lines[i] and ">:" in lines[i]:
 			startAddr = lines[i].split()[0]

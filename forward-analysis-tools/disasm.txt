@@ -1,22 +1,6 @@
 
 enclave.so:     file format elf64-x86-64
 
-
-Disassembly of section .plt:
-
-0000000000000ad0 <.plt>:
- ad0:	ff 35 f2 54 22 00    	pushq  0x2254f2(%rip)        # 225fc8 <_GLOBAL_OFFSET_TABLE_+0x8>
- ad6:	ff 25 f4 54 22 00    	jmpq   *0x2254f4(%rip)        # 225fd0 <_GLOBAL_OFFSET_TABLE_+0x10>
- adc:	0f 1f 40 00          	nopl   0x0(%rax)
-
-Disassembly of section .plt.got:
-
-0000000000000ae0 <.plt.got>:
- ae0:	ff 25 fa 54 22 00    	jmpq   *0x2254fa(%rip)        # 225fe0 <_GLOBAL_OFFSET_TABLE_+0x20>
- ae6:	66 90                	xchg   %ax,%ax
- ae8:	ff 25 0a 55 22 00    	jmpq   *0x22550a(%rip)        # 225ff8 <_GLOBAL_OFFSET_TABLE_+0x38>
- aee:	66 90                	xchg   %ax,%ax
-
 Disassembly of section .text:
 
 0000000000000af0 <_GLOBAL__sub_I_hash.cpp>:
